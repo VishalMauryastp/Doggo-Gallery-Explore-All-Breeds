@@ -21,7 +21,7 @@ const Result = ({ breed }) => {
   }, [breed]);
   return (
     <div className="bg-white">
-      {breed.length > 0 ? (
+      {data.length > 0 ? (
         <h1 className="text-2xl font-bold ml-8 mt-8"> Result for {breed} </h1>
       ) : null}
 
