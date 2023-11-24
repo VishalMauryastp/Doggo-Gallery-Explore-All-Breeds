@@ -1,15 +1,17 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-const Result = ({ breed }) => {
+const Result = ({ breed, selectedSubcetagory }) => {
   const [data, setData] = useState([]);
-  console.log(breed);
+  console.log(selectedSubcetagory);
+
+  const subBreed = `/${selectedSubcetagory}`;
 
   useEffect(() => {
     if (breed) {
       axios({
         method: "get",
-        url: `https://dog.ceo/api/breed/${breed}/images`,
+        url: `https://dog.ceo/api/breed/${breed}${selectedSubcetagory ? subBreed :""}/images`,
       })
         .then((result) => {
           setData(result.data.message);
@@ -18,11 +20,16 @@ const Result = ({ breed }) => {
           console.error("Error fetching data:", error);
         });
     }
-  }, [breed]);
+  }, [breed,selectedSubcetagory]);
   return (
-    <div className="bg-white">
+    <div className={`bg-white  ${data.length > 0 ? "min-h-[calc(100vh-90px)]":""} `}>
       {data.length > 0 ? (
-        <h1 className="text-2xl font-bold ml-8 mt-8"> Result for {breed} </h1>
+        <h1 className="text-2xl font-bold ml-8 pt-8">
+          Result for{" "}
+          <span className=" uppercase text-black/60">
+           '{breed} {selectedSubcetagory}'
+          </span>
+        </h1>
       ) : null}
 
       {data.length > 0 ? (

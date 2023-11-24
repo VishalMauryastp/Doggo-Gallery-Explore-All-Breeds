@@ -4,6 +4,7 @@ import Result from "./components/Result/Result";
 
 const App = () => {
   const [breed, setBreed] = useState([]);
+  const [selectedSubcetagory, setSelectedSubcetagory] = useState("");
 
   return (
     <>
@@ -16,11 +17,17 @@ const App = () => {
         className={` bg-[url("/mobileimg.jpg")] md:bg-[url("/tabimg.jpg")] xl:bg-[url("/dogimg.jpg")]  bg-cover min-h-[calc(100vh-50px)]`}
       >
         <div>
-          <Home breed={breed} setBreed={setBreed} />
-          <Result breed={breed} setBreed={setBreed} />
+          <Home breed={breed} setBreed={setBreed}  setSelectedSubcetagory={setSelectedSubcetagory}
+ />
+          <Result
+            breed={breed}
+            setBreed={setBreed}
+            selectedSubcetagory={selectedSubcetagory}
+           
+          />
         </div>
       </main>
-      <footer class="text-center text-gray-500 text-sm py-4">
+      <footer className="text-center text-gray-500 text-sm py-4">
         &copy; 2023 Doggo Gallery. All rights reserved.
       </footer>
     </>

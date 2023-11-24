@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const Home = ({ breed, setBreed }) => {
+const Home = ({
+  breed,
+  setBreed,
+  selectedSubcetagory,
+  setSelectedSubcetagory,
+}) => {
   const [data, setData] = useState([]);
+  const [cetagory, setCetagory] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [selectedSuggestion, setSelectedSuggestion] = useState(null);
 
@@ -20,9 +26,25 @@ const Home = ({ breed, setBreed }) => {
       });
   }, [setBreed]);
 
+  useEffect(() => {
+    if (cetagory) {
+      axios({
+        method: "get",
+        url: `https://dog.ceo/api/breed/${cetagory}/list`,
+      })
+        .then((result) => {
+          setCetagory(result.data.message);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+    }
+  }, [cetagory]);
+
   const handleSuggestionClick = (val) => {
     setSelectedSuggestion(val);
     setInputValue(val[0]);
+    setCetagory(val);
   };
 
   const handleSearch = () => {
@@ -32,9 +54,9 @@ const Home = ({ breed, setBreed }) => {
   return (
     <div>
       <div className="">
-        <div className="pt-4  w-[80%] lg:w-[700px] relative  mx-auto">
+        <div className="pt-4   w-[80%] lg:w-[700px] relative  mx-auto">
           <div
-            className=" bg-white   flex items-center py-2  px-4 rounded "
+            className=" bg-white mt-8  flex gap-2 items-center py-2  px-4 rounded "
             style={{
               boxShadow: " 0 0 10px #525252",
             }}
@@ -49,10 +71,33 @@ const Home = ({ breed, setBreed }) => {
                 setSelectedSuggestion(null);
               }}
             />
+            <div className=" max-md:hidden border-l-2 border-gray-300">
+              <select
+                className=" max-sm:w-full px-4 py-2 outline-none"
+                name="subBreed"
+                id="subBreedSelect"
+                value={selectedSubcetagory}
+                onChange={(e) => {
+                  setSelectedSubcetagory(e.target.value);
+                }}
+              >
+                <option value="">Select sub breed</option>
+                {cetagory.map((val, i) => {
+                  return (
+                    <option key={i} value={val}>
+                      {val}
+                    </option>
+                  );
+                })}
+                {cetagory.length === 0 ? (
+                  <option value="">No result found!</option>
+                ) : null}
+              </select>
+            </div>
+
             <button
               className="px-4 py-1 bg-gray-400 text-white rounded"
               onClick={handleSearch}
-
               disabled={!inputValue}
             >
               Search
@@ -91,6 +136,34 @@ const Home = ({ breed, setBreed }) => {
                 <div className="mx-4 py-1 text-gray-500">No results found</div>
               )}
             </div>
+          </div>
+          <div
+            className=" md:hidden bg-white  mt-4 max-sm:w-full   w-fit"
+            style={{
+              boxShadow: " 0 0 2px #525252",
+            }}
+          >
+            <select
+              className=" max-sm:w-full px-4 py-2 outline-none"
+              name="subBreed"
+              id="subBreedSelect"
+              value={selectedSubcetagory}
+              onChange={(e) => {
+                setSelectedSubcetagory(e.target.value);
+              }}
+            >
+              <option value="">Select sub breed</option>
+              {cetagory.map((val, i) => {
+                return (
+                  <option key={i} value={val}>
+                    {val}
+                  </option>
+                );
+              })}
+              {cetagory.length === 0 ? (
+                <option value="">No result found!</option>
+              ) : null}
+            </select>
           </div>
         </div>
       </div>
